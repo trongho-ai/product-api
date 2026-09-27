@@ -142,3 +142,26 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/product-api:latest
+
+  deploy-local:
+    needs: build-and-push
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on:
+      - self-hosted
+      - Windows
+      - X64
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Pull latest image from Docker Hub
+        run: docker compose -f docker-compose-prod.yaml pull
+
+      - name: Restart production containers
+        run: docker compose -f docker-compose-prod.yaml up -d --force-recreate
+
+      - name: Show production container status
+        run: docker compose -f docker-compose-prod.yaml ps
