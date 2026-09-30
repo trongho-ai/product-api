@@ -26,10 +26,20 @@ app.get("/", (req, res) => {
   });
 });
 
-// HEALTHCHECK - kiểm tra API có đang hoạt động không
+// HEALTHCHECK - kiểm tra cả API và MongoDB
 app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "OK"
+  const dbConnected = mongoose.connection.readyState === 1;
+
+  if (dbConnected) {
+    return res.status(200).json({
+      status: "OK",
+      database: "connected"
+    });
+  }
+
+  return res.status(503).json({
+    status: "DB_DOWN",
+    database: "disconnected"
   });
 });
 
@@ -85,7 +95,7 @@ app.put("/products/:pid", async (req, res) => {
       { pid: req.params.pid },
       req.body,
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true
       }
     );
