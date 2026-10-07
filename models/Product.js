@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema({
   pid: {
     type: Number,
     required: true,
-    unique: true
+    unique: false
   },
   pname: {
     type: String,

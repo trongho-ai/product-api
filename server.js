@@ -22,7 +22,7 @@ mongoose
 // Trang kiểm tra server
 app.get("/", (req, res) => {
   res.json({
-    message: "Product API is running"
+    message: "Product API is staring up......."
   });
 });
 

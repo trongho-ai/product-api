@@ -74,7 +74,7 @@ jobs:
           cat server.log
           exit 1
 
-      - name: Test Product CRUD
+      - name: Test Product CRUD-Changes
         run: |
           echo "1. CREATE PRODUCT"
           CREATE=$(curl -fsS -X POST http://127.0.0.1:3000/products \
